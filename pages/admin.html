@@ -20,8 +20,8 @@
             <div style="display: inline-block;width: 100px;margin-right: 10px;">
                 <select id="sltKey">
                     <option value="">搜索条件</option>
-                    <option value="AdminId">账号</option>
-                    <option value="adminName">用户名</option>
+                    <option value="adminId">账号</option>
+                    <option value="adminName">姓名</option>
                     <option value="adminSex">性别</option>
                     <option value="phone">手机号</option>
                     <option value="email">邮箱</option>
@@ -58,9 +58,9 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">用户名</label>
+            <label class="layui-form-label">姓名</label>
             <div class="layui-input-block">
-                <input name="adminName" placeholder="请输入用户名" type="text" class="layui-input"
+                <input name="adminName" placeholder="请输入姓名" type="text" class="layui-input"
                        maxlength="20" lay-verify="required" required/>
             </div>
         </div>
@@ -133,7 +133,7 @@
             },
             cols: [[
                 {field: 'adminId', title: '账号', sort: true},
-                {field: 'adminName', title: '用户名', sort: true},
+                {field: 'adminName', title: '姓名', sort: true},
                 {field: 'adminSex', title: '性别', sort: true},
                 {field: 'phone', title: '手机号', sort: true},
                 {field: 'email', title: '邮箱', sort: true},
@@ -149,7 +149,7 @@
             var layEvent = obj.event;
 
             if (layEvent === 'del') { // 删除
-                layer.confirm('确定删除此用户吗？', function (i) {
+                layer.confirm('确定删除此管理员吗？', function (i) {
                     layer.close(i);
                     layer.load(2);
                     console.log(data);
@@ -185,7 +185,7 @@
         $('#userBtnAdd').click(function () {
             showEditModel();
         });
-        
+
         // 显示表单弹窗
         function showEditModel(data) {
             layer.open({
