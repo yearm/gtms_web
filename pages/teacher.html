@@ -172,8 +172,8 @@
         var layer = layui.layer;
         var form = layui.form;
         var table = layui.table;
-        // var util = layui.util;
-        // var formSelects = layui.formSelects;
+        var util = layui.util;
+        var formSelects = layui.formSelects;
         var admin = layui.admin;
 
         // 搜索按钮点击事件
@@ -230,7 +230,7 @@
             var layEvent = obj.event;
 
             if (layEvent === 'del') { // 删除
-                layer.confirm('确定删除此用户吗？', function (i) {
+                layer.confirm('确定删除此教师吗？', function (i) {
                     layer.close(i);
                     layer.load(2);
                     console.log(data);
@@ -245,7 +245,7 @@
                     }, 'DELETE');
                 });
             } else if (layEvent === 'reset') { // 重置密码
-                layer.confirm('确定重置此用户的密码吗？<br><span style="color: red;">（初始密码为123456）</span>', function (i) {
+                layer.confirm('确定重置此教师的密码吗？<br><span style="color: red;">（初始密码为123456）</span>', function (i) {
                     layer.close(i);
                     layer.load(2);
                     admin.req('account/pwd?role=teacher&uid=' + data.techId, {}, function (res) {

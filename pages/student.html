@@ -1,10 +1,307 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>用户管理</title>
+    <link rel="icon" href="../assets/images/favicon.ico"/>
+    <link rel="stylesheet" href="../assets/libs/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../assets/module/formSelects/formSelects-v4.css" media="all">
+    <link rel="stylesheet" href="../assets/common.css" media="all">
 </head>
+
 <body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body layui-form">
+            <div style="display: inline-block;width: 100px;margin-right: 10px;">
+                <select id="sltKey">
+                    <option value="">搜索条件</option>
+                    <option value="stuNo">学号</option>
+                    <option value="stuName">姓名</option>
+                    <option value="stuSex">性别</option>
+                    <option value="idCard">身份证</option>
+                    <option value="birthplace">籍贯</option>
+                    <option value="department">院系</option>
+                    <option value="major">专业</option>
+                    <option value="class">班级</option>
+                    <option value="phone">手机号</option>
+                    <option value="qq">QQ</option>
+                    <option value="email">邮箱</option>
+                    <option value="weChat">微信</option>
+                    <option value="schoolSystem">学制</option>
+                    <option value="entryDate">入学日期</option>
+                    <option value="education">学历</option>
+                </select>
+            </div>
+            <div style="display: inline-block;margin-right: 10px;width: 160px;">
+                <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+            </div>
+            <div class="layui-inline">
+                <button id="userBtnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                <button id="userBtnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+            </div>
+            <table class="layui-table" id="userTable" lay-filter="userTable"></table>
+        </div>
+    </div>
+
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="reset">重置密码</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<!-- 表单弹窗 -->
+<script type="text/html" id="userForm">
+    <form lay-filter="userForm" class="layui-form model-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">账号</label>
+            <div class="layui-input-block">
+                <input name="stuNo" placeholder="请输入学号" type="text" class="layui-input"
+                       maxlength="20" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-block">
+                <input name="stuName" placeholder="请输入姓名" type="text" class="layui-input"
+                       maxlength="20" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <input type="radio" name="stuSex" value="男" title="男" checked/>
+                <input type="radio" name="stuSex" value="女" title="女"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">身份证</label>
+            <div class="layui-input-block">
+                <input name="idCard" placeholder="请输入身份证" type="text" class="layui-input"
+                       maxlength="20" lay-verify="required|identity" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">籍贯</label>
+            <div class="layui-input-block">
+                <input name="birthplace" placeholder="请输入籍贯" type="text" class="layui-input"
+                       maxlength="20" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">院系</label>
+            <div class="layui-input-block">
+                <input name="department" placeholder="请输入院系" type="text" class="layui-input"
+                       maxlength="20" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">专业</label>
+            <div class="layui-input-block">
+                <input name="major" placeholder="请输入专业" type="text" class="layui-input"
+                       maxlength="20" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">班级</label>
+            <div class="layui-input-block">
+                <input name="class" placeholder="请输入班级" type="text" class="layui-input"
+                       maxlength="20" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">手机号</label>
+            <div class="layui-input-block">
+                <input name="phone" placeholder="请输入手机号" type="text" class="layui-input"
+                       lay-verify="required|phone" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">QQ</label>
+            <div class="layui-input-block">
+                <input name="qq" placeholder="请输入QQ" type="text" class="layui-input"
+                       lay-verify="required|number" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-block">
+                <input name="email" placeholder="请输入邮箱" type="text" class="layui-input"
+                       lay-verify="required|email" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">学制</label>
+            <div class="layui-input-block">
+                <input name="schoolSystem" placeholder="请输入指导学制" type="text" class="layui-input"
+                       maxlength="20" lay-verify="required|number" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">入学日期</label>
+            <div class="layui-input-block">
+                <input name="entryDate" type="text" class="layui-input" id="entryDate"
+                       placeholder="yyyy-MM-dd HH:mm:ss">
+            </div>
+        </div>
+        <div class="layui-form-item text-right">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+            <button class="layui-btn" lay-filter="userFormSubmit" lay-submit>保存</button>
+        </div>
+    </form>
+</script>
+
+<script type="text/javascript" src="../assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../assets/common.js"></script>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'formSelects', 'admin', 'laydate'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var laydate = layui.laydate;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+
+        // 搜索按钮点击事件
+        $('#userBtnSearch').click(function () {
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            table.reload('userTable', {where: {searchKey: key, searchValue: value}});
+        });
+
+        // 渲染表格
+        table.render({
+            elem: '#userTable',
+            url: base_server + 'account?role=student',
+            method: 'get',
+            headers: {'X-Access-Token': admin.getToken()},
+            page: true,
+            request: {
+                pageName: 'page', //页码的参数名称，默认：page
+                limitName: 'pageCount' //每页数据量的参数名，默认：limit
+            },
+            cellMinWidth: 100,
+            parseData: function (res) {
+                return {
+                    "code": res.status.code, //解析接口状态
+                    "msg": res.status.message, //解析提示文本
+                    "count": res.data.pageInfo.total, //解析数据长度
+                    "data": res.data.dataList //解析数据列表
+                }
+            },
+            cols: [[
+                {field: 'stuNo', title: '学号', sort: true},
+                {field: 'stuName', title: '姓名', sort: true},
+                {field: 'stuSex', title: '性别', sort: true},
+                {field: 'idCard', title: '身份证', sort: true},
+                {field: 'birthplace', title: '籍贯', sort: true},
+                {field: 'department', title: '院系', sort: true},
+                {field: 'major', title: '专业', sort: true},
+                {field: 'class', title: '班级', sort: true},
+                {field: 'phone', title: '手机号', sort: true},
+                {field: 'qq', title: 'QQ', sort: true},
+                {field: 'email', title: '邮箱', sort: true},
+                {field: 'weChat', title: '微信', sort: true},
+                {field: 'schoolSystem', title: '学制', sort: true},
+                {field: 'entryDate', title: '入学日期', sort: true},
+                {align: 'center', toolbar: '#tableBar', title: '操作', unresize: true, width: 200}
+            ]],
+            skin: 'line',
+            size: 'lg'
+        });
+
+        // 工具条点击事件
+        table.on('tool(userTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'del') { // 删除
+                layer.confirm('确定删除此学生吗？', function (i) {
+                    layer.close(i);
+                    layer.load(2);
+                    console.log(data);
+                    admin.req('account?role=student&uid=' + data.stuNo, {}, function (res) {
+                        layer.closeAll('loading');
+                        if (res.status.code == 0) {
+                            layer.msg("删除成功", {icon: 1});
+                            obj.del();
+                        } else {
+                            layer.msg(res.status.message, {icon: 2});
+                        }
+                    }, 'DELETE');
+                });
+            } else if (layEvent === 'reset') { // 重置密码
+                layer.confirm('确定重置此学生的密码吗？<br><span style="color: red;">（初始密码为123456）</span>', function (i) {
+                    layer.close(i);
+                    layer.load(2);
+                    admin.req('account/pwd?role=student&uid=' + data.stuNo, {}, function (res) {
+                        layer.closeAll('loading');
+                        if (res.status.code == 0) {
+                            layer.msg("重置成功", {icon: 1});
+                        } else {
+                            layer.msg(res.status.message, {icon: 2});
+                        }
+                    }, 'PUT');
+                });
+            } else if (layEvent === 'edit') { // 修改
+                showEditModel(data);
+            }
+        });
+
+        // 添加按钮点击事件
+        $('#userBtnAdd').click(function () {
+            showEditModel();
+        });
+
+        // 显示表单弹窗
+        function showEditModel(data) {
+            layer.open({
+                type: 1,
+                area: '360px',
+                offset: '10px',
+                title: data ? '修改学生' : '添加学生',
+                content: $('#userForm').html(),
+                success: function (layero, index) {
+                    $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                    form.render('radio');
+                    // 回显admin数据
+                    if (data) {
+                        form.val('userForm', data);
+                    }
+                    //日期选择器
+                    laydate.render({
+                        elem: '#entryDate',
+                        type: 'datetime'
+                    });
+                    // 表单提交事件
+                    form.on('submit(userFormSubmit)', function (d) {
+                        layer.load(2);
+                        admin.req('account?role=student', d.field, function (res) {
+                            layer.closeAll('loading');
+                            if (res.status.code == 0) {
+                                layer.msg(res.status.message, {icon: 1});
+                                layer.closeAll('page');
+                                table.reload('userTable');
+                            } else {
+                                layer.msg(res.status.message, {icon: 2});
+                            }
+                        }, data ? 'PUT' : 'POST');
+                        return false;
+                    });
+                }
+            });
+        }
+
+    });
+</script>
 
 </body>
 </html>
