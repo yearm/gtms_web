@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>毕业论文管理系统</title>
+    <link rel="icon" href="../assets/images/favicon.ico"/>
+    <link rel="stylesheet" href="../assets/libs/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../assets/module/formSelects/formSelects-v4.css" media="all">
+    <link rel="stylesheet" href="../assets/common.css" media="all">
+</head>
+
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body layui-form">
+            <div style="display: inline-block;width: 100px;margin-right: 10px;">
+                <select id="sltKey">
+                    <option value="">搜索条件</option>
+                    <option value="tid">论文id</option>
+                    <option value="subject">论文题目</option>
+                    <option value="subtopic">副题目</option>
+                    <option value="keyword">关键字</option>
+                    <option value="type">题目类型</option>
+                    <option value="source">题目来源</option>
+                    <option value="workload">工作量</option>
+                    <option value="degreeDifficulty">难易度</option>
+                    <option value="researchDirec">研究方向</option>
+                    <option value="content">内容</option>
+                    <option value="updateUser">创建人</option>
+                    <option value="updateTime">创建时间</option>
+                    <option value="status">状态</option>
+                </select>
+            </div>
+            <div style="display: inline-block;margin-right: 10px;width: 160px;">
+                <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+            </div>
+            <div class="layui-inline">
+                <button id="userBtnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                <button id="userBtnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+            </div>
+            <table class="layui-table" id="thesisTable" lay-filter="thesisTable"></table>
+        </div>
+    </div>
+</div>
+<!--论文状态-->
+<script type="text/html" id="status">
+    {{#  if(d.status === '0'){ }}
+    <span style="color: #009788;">可选</span>
+    {{#  } else { }}
+    <span style="color: #ff5335;">不可选</span>
+    {{#  } }}
+</script>
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-xs" lay-event="select">选题</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<!-- 表单弹窗 -->
+<script type="text/html" id="thesisForm">
+    <form lay-filter="thesisForm" class="layui-form model-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">论文题目</label>
+            <div class="layui-input-block">
+                <input name="subject" placeholder="请输入论文题目" type="text" class="layui-input"
+                       maxlength="20" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">副题目</label>
+            <div class="layui-input-block">
+                <input name="subtopic" placeholder="请输入副题目" type="text" class="layui-input"
+                       maxlength="20"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">关键字</label>
+            <div class="layui-input-block">
+                <input name="keyword" placeholder="请输入关键字" type="text" class="layui-input"
+                       lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">题目类型</label>
+            <div class="layui-input-block">
+                <input name="type" placeholder="请输入题目类型" type="text" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">题目来源</label>
+            <div class="layui-input-block">
+                <input name="source" placeholder="请输入题目来源" type="text" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">工作量</label>
+            <div class="layui-input-block">
+                <input name="workload" placeholder="请输入工作量" type="text" class="layui-input"
+                       lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">难易度</label>
+            <div class="layui-input-block">
+                <input name="degreeDifficulty" placeholder="请输入难易度" type="text" class="layui-input"
+                       lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">研究方向</label>
+            <div class="layui-input-block">
+                <input name="researchDirec" placeholder="请输入研究方向" type="text" class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">内容</label>
+            <div class="layui-input-block">
+                <input name="content" placeholder="请输入内容" type="text" class="layui-input"
+                       lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item text-right">
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+            <button class="layui-btn" lay-filter="thesisFormSubmit" lay-submit>保存</button>
+        </div>
+    </form>
+</script>
+
+<script type="text/javascript" src="../assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../assets/common.js"></script>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'formSelects', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+
+        // 搜索按钮点击事件
+        $('#userBtnSearch').click(function () {
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            table.reload('thesisTable', {where: {searchKey: key, searchValue: value}});
+        });
+
+        // 渲染表格
+        table.render({
+            elem: '#thesisTable',
+            url: base_server + 'thesis',
+            method: 'get',
+            headers: {'X-Access-Token': admin.getToken()},
+            page: true,
+            request: {
+                pageName: 'page', //页码的参数名称，默认：page
+                limitName: 'pageCount' //每页数据量的参数名，默认：limit
+            },
+            cellMinWidth: 100,
+            parseData: function (res) {
+                return {
+                    "code": res.status.code, //解析接口状态
+                    "msg": res.status.message, //解析提示文本
+                    "count": res.data.pageInfo.total, //解析数据长度
+                    "data": res.data.dataList //解析数据列表
+                }
+            },
+            cols: [[
+                {field: 'tid', title: '论文id', sort: true},
+                {field: 'subject', title: '论文题目', sort: true},
+                {field: 'subtopic', title: '副题目', sort: true},
+                {field: 'keyword', title: '关键字', sort: true},
+                {field: 'type', title: '题目类型', sort: true},
+                {field: 'workload', title: '工作量', sort: true},
+                {field: 'degreeDifficulty', title: '难易度', sort: true},
+                {field: 'researchDirec', title: '研究方向', sort: true},
+                {field: 'content', title: '内容', sort: true},
+                {field: 'updateUser', title: '创建人', sort: true},
+                {field: 'updateTime', title: '创建时间', sort: true},
+                {field: 'status', title: '状态', sort: true, templet: '#status'},
+                {align: 'center', toolbar: '#tableBar', title: '操作', unresize: true, width: 200}
+            ]],
+            even: true,
+            skin: 'line',
+            size: 'sm'
+        });
+
+        // 工具条点击事件
+        table.on('tool(thesisTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'del') { // 删除
+                layer.confirm('确定删除此论文题目吗？', function (i) {
+                    layer.close(i);
+                    layer.load(2);
+                    console.log(data);
+                    admin.req('thesis?tid=' + data.tid, {}, function (res) {
+                        layer.closeAll('loading');
+                        if (res.status.code == 0) {
+                            layer.msg("删除成功", {icon: 1});
+                            obj.del();
+                        } else {
+                            layer.msg(res.status.message, {icon: 2});
+                        }
+                    }, 'DELETE');
+                });
+            } else if (layEvent === 'edit') { // 修改
+                layer.open({
+                    type: 1,
+                    area: '360px',
+                    offset: '65px',
+                    title: '修改论文',
+                    content: $('#thesisForm').html(),
+                    success: function (layero, index) {
+                        $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                        // 回显数据
+                        form.val('thesisForm', data);
+                        // 表单提交事件
+                        form.on('submit(thesisFormSubmit)', function (d) {
+                            d.field.tid = data.tid;
+                            layer.load(2);
+                            admin.req('thesis', d.field, function (res) {
+                                layer.closeAll('loading');
+                                if (res.status.code == 0) {
+                                    layer.msg(res.status.message, {icon: 1});
+                                    layer.closeAll('page');
+                                    table.reload('thesisTable');
+                                } else {
+                                    layer.msg(res.status.message, {icon: 2});
+                                }
+                            }, 'PUT');
+                            return false;
+                        });
+                    }
+                });
+            } else if (layEvent === 'select') {
+                layer.confirm('确定选择此论文题目吗？', function (i) {
+                    layer.close(i);
+                    layer.load(2);
+                    admin.req('selectThesis/student', {tid: data.tid}, function (res) {
+                        layer.closeAll('loading');
+                        if (res.status.code == 0) {
+                            layer.msg("选题成功", {icon: 1});
+                            layer.closeAll('page');
+                            table.reload('thesisTable');
+                        } else {
+                            layer.msg(res.status.message, {icon: 2});
+                        }
+                    }, 'POST');
+                });
+            }
+        });
+
+        // 添加论文按钮点击事件
+        $('#userBtnAdd').click(function () {
+            layer.open({
+                type: 1,
+                area: '360px',
+                offset: '65px',
+                title: '添加论文',
+                content: $('#thesisForm').html(),
+                success: function (layero, index) {
+                    $(layero).children('.layui-layer-content').css('overflow', 'visible');
+                    // 表单提交事件
+                    form.on('submit(thesisFormSubmit)', function (d) {
+                        layer.load(2);
+                        admin.req('thesis', d.field, function (res) {
+                            layer.closeAll('loading');
+                            if (res.status.code == 0) {
+                                layer.msg(res.status.message, {icon: 1});
+                                layer.closeAll('page');
+                                table.reload('thesisTable');
+                            } else {
+                                layer.msg(res.status.message, {icon: 2});
+                            }
+                        }, 'POST');
+                        return false;
+                    });
+                }
+            });
+        });
+
+    });
+</script>
+
+</body>
+</html>

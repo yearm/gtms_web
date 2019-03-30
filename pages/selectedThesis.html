@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>毕业论文管理系统</title>
+    <link rel="icon" href="../assets/images/favicon.ico"/>
+    <link rel="stylesheet" href="../assets/libs/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../assets/module/formSelects/formSelects-v4.css" media="all">
+    <link rel="stylesheet" href="../assets/common.css" media="all">
+</head>
+
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body layui-form">
+            <div style="display: inline-block;width: 100px;margin-right: 10px;">
+                <select id="sltKey">
+                    <option value="">搜索条件</option>
+                    <option value="major">专业</option>
+                    <option value="stuNo">学号</option>
+                    <option value="stuName">姓名</option>
+                    <option value="subject">论文题目</option>
+                    <option value="source">课题来源</option>
+                    <option value="type">题目类型</option>
+                    <option value="source">课题类型</option>
+                    <option value="techName">指导老师姓名</option>
+                    <option value="jobTitle">职称</option>
+                    <option value="education">学历</option>
+                </select>
+            </div>
+            <div style="display: inline-block;margin-right: 10px;width: 160px;">
+                <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+            </div>
+            <div class="layui-inline">
+                <button id="userBtnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+            </div>
+            <table class="layui-table" id="thesisTable" lay-filter="thesisTable"></table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../assets/common.js"></script>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'formSelects', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+
+        // 搜索按钮点击事件
+        $('#userBtnSearch').click(function () {
+            var key = $('#sltKey').val();
+            var value = $('#edtSearch').val();
+            table.reload('thesisTable', {where: {searchKey: key, searchValue: value}});
+        });
+
+        // 渲染表格
+        table.render({
+            elem: '#thesisTable',
+            url: base_server + 'selectedThesis',
+            method: 'get',
+            headers: {'X-Access-Token': admin.getToken()},
+            page: true,
+            request: {
+                pageName: 'page', //页码的参数名称，默认：page
+                limitName: 'pageCount' //每页数据量的参数名，默认：limit
+            },
+            cellMinWidth: 100,
+            parseData: function (res) {
+                console.log(res.data.dataList);
+                return {
+                    "code": res.status.code, //解析接口状态
+                    "msg": res.status.message, //解析提示文本
+                    "count": res.data.pageInfo.total, //解析数据长度
+                    "data": res.data.dataList //解析数据列表
+                }
+            },
+            cols: [[
+                {field: 'major', title: '专业', sort: true},
+                {field: 'stuNo', title: '学号', sort: true},
+                {field: 'stuName', title: '姓名', sort: true},
+                {field: 'subject', title: '论文题目', sort: true},
+                {field: 'source', title: '课题来源', sort: true},
+                {field: 'type', title: '课题类型', sort: true},
+                {field: 'techName', title: '指导老师姓名', sort: true},
+                {field: 'jobTitle', title: '职称', sort: true},
+                {field: 'education', title: '学历', sort: true},
+            ]],
+            even: true,
+            skin: 'line',
+            size: 'sm'
+        });
+
+    });
+</script>
+
+</body>
+</html>

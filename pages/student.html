@@ -5,7 +5,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>用户管理</title>
+    <title>毕业论文管理系统</title>
     <link rel="icon" href="../assets/images/favicon.ico"/>
     <link rel="stylesheet" href="../assets/libs/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="../assets/module/formSelects/formSelects-v4.css" media="all">
@@ -33,7 +33,7 @@
                     <option value="email">邮箱</option>
                     <option value="weChat">微信</option>
                     <option value="schoolSystem">学制</option>
-                    <option value="entryDate">入学日期</option>
+                    <!--<option value="entryDate">入学日期</option>-->
                     <option value="education">学历</option>
                 </select>
             </div>
@@ -52,8 +52,8 @@
 
 <!-- 表格操作列 -->
 <script type="text/html" id="tableBar">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="reset">重置密码</a>
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-xs" lay-event="reset">重置密码</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <!-- 表单弹窗 -->
@@ -211,11 +211,12 @@
                 {field: 'email', title: '邮箱', sort: true},
                 {field: 'weChat', title: '微信', sort: true},
                 {field: 'schoolSystem', title: '学制', sort: true},
-                {field: 'entryDate', title: '入学日期', sort: true},
+                // {field: 'entryDate', title: '入学日期', sort: true},
                 {align: 'center', toolbar: '#tableBar', title: '操作', unresize: true, width: 200}
             ]],
+            even: true,
             skin: 'line',
-            size: 'lg'
+            size: 'sm'
         });
 
         // 工具条点击事件

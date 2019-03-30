@@ -17,10 +17,11 @@
         <div class="layui-logo">毕业论文管理系统</div>
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item" lay-unselect>
-                <a id="btnUP"><img src="assets/images/head.png" class="layui-nav-img"><span id="uName">用户名</span></a>
-            </li>
-            <li class="layui-nav-item" lay-unselect>
-                <a id="btnExit"><i class="layui-icon layui-icon-close-fill"></i> 退出登录</a>
+                <a><img src="assets/images/head.png" class="layui-nav-img"><span id="uName">用户名</span></a>
+                <dl class="layui-nav-child">
+                    <dd><a id="btnUP" href="javascript:;">修改密码</a></dd>
+                    <dd><a id="btnExit" href="javascript:;">退出登录</a></dd>
+                </dl>
             </li>
         </ul>
     </div>
@@ -29,23 +30,26 @@
         <div class="layui-side-scroll">
             <ul class="layui-nav layui-nav-tree" style="margin-top: 10px;">
                 <li class="layui-nav-item layui-nav-itemed">
-                    <a><i class="layui-icon layui-icon-username"></i>&emsp;账号管理</a>
+                    <a><i class="layui-icon layui-icon-username"></i>&emsp;账号信息</a>
                     <dl class="layui-nav-child">
                         <dd class="layui-this"><a lay-href="pages/admin.html">管理员</a></dd>
-                        <dd><a lay-href="pages/teacher.html">教师</a></dd>
-                        <dd><a lay-href="pages/student.html">学生</a></dd>
+                        <dd><a lay-href="pages/teacher.html">指导老师列表</a></dd>
+                        <dd><a lay-href="pages/student.html">学生列表</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a><i class="layui-icon layui-icon-console"></i>&emsp;系统监控</a>
+                    <a><i class="layui-icon layui-icon-read"></i>&emsp;论文信息</a>
                     <dl class="layui-nav-child">
-                        <dd><a lay-href="/druid">Druid监控</a></dd>
+                        <dd><a lay-href="pages/thesis.html">论文列表</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a><i class="layui-icon layui-icon-list"></i>&emsp;接口文档</a>
+                    <a><i class="layui-icon layui-icon-form"></i>&emsp;选题信息</a>
                     <dl class="layui-nav-child">
-                        <dd><a lay-href="/swagger-ui.html">接口文档</a></dd>
+                        <dd><a lay-href="pages/selectedThesis.html">选题列表</a></dd>
+                        <dd><a lay-href="pages/waitConfirm.html">等待确认列表</a></dd>
+                        <dd><a lay-href="pages/confirmedThesis.html">已确认列表</a></dd>
+                        <dd><a lay-href="pages/openTime.html">选题时间管理</a></dd>
                     </dl>
                 </li>
             </ul>
