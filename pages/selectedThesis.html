@@ -36,7 +36,7 @@
                 <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
             </div>
             <div class="layui-inline">
-                <button id="userBtnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
             </div>
             <table class="layui-table" id="thesisTable" lay-filter="thesisTable"></table>
         </div>
@@ -56,7 +56,7 @@
         var admin = layui.admin;
 
         // 搜索按钮点击事件
-        $('#userBtnSearch').click(function () {
+        $('#btnSearch').click(function () {
             var key = $('#sltKey').val();
             var value = $('#edtSearch').val();
             table.reload('thesisTable', {where: {searchKey: key, searchValue: value}});
