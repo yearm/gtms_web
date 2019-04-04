@@ -64,7 +64,6 @@
             form.on('submit(loginSubmit)', function (data) {
                 layer.load(2);
                 admin.req('account/login', data.field, function (res) {
-                    console.log(data.field);
                     layer.closeAll('loading');
                     if (0 == res.status.code) {
                         admin.putToken(res.data.accessToken);
