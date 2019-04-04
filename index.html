@@ -100,9 +100,9 @@
         var techId;//教师id
         var stuNo;//学生id
 
-        // if (!admin.getToken()) {
-        //     location.replace('login.html');
-        // }
+        if (!admin.getToken()) {
+            location.replace('login.html');
+        }
 
         //获取用户基本信息
         layer.load(2);
