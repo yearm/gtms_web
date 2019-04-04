@@ -121,6 +121,7 @@
                     $('#uName').text(res.data.stuInfo.stuName);
                 }
             } else {
+                layer.msg(res.status.message, {icon: 2});
                 location.replace('login.html');
             }
         }, 'GET');
