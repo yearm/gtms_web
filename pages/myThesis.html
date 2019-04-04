@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>毕业论文管理系统</title>
+    <link rel="icon" href="../assets/images/favicon.ico"/>
+    <link rel="stylesheet" href="../assets/libs/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../assets/module/formSelects/formSelects-v4.css" media="all">
+    <link rel="stylesheet" href="../assets/common.css" media="all">
+</head>
+
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form-item">
+            <label class="layui-form-label">论文题目</label>
+            <div class="layui-input-block">
+                <input id="subject" type="text" class="layui-input" style="border: none;" disabled/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">论文副题目</label>
+            <div class="layui-input-block">
+                <input id="subtopic" type="text" class="layui-input" style="border: none;" disabled/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">关键字</label>
+            <div class="layui-input-block">
+                <input id="keyWord" type="text" class="layui-input" style="border: none;" disabled/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">题目类别</label>
+            <div class="layui-input-block">
+                <input id="type" type="text" class="layui-input" style="border: none;" disabled/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">题目来源</label>
+            <div class="layui-input-block">
+                <input id="source" type="text" class="layui-input" style="border: none;" disabled/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">工作量</label>
+            <div class="layui-input-block">
+                <input id="workload" type="text" class="layui-input" style="border: none;" disabled/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">难易度</label>
+            <div class="layui-input-block">
+                <input id="degreeDifficulty" type="text" class="layui-input" style="border: none;" disabled/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">研究方向</label>
+            <div class="layui-input-block">
+                <input id="researchDirec" type="text" class="layui-input" style="border: none;" disabled/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">内容</label>
+            <div class="layui-input-block">
+                <input id="content" type="text" class="layui-input" style="border: none;" disabled/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">指导老师</label>
+            <div class="layui-input-block">
+                <input id="techName" type="text" class="layui-input" style="border: none;" disabled/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">开题报告</label>
+            <div class="layui-input-inline">
+                <input id="openingReport" type="text" class="layui-input" style="border:none;width: 400px" disabled/>
+            </div>
+            <div class="layui-input-block">
+                <button id="reportPreview" class="layui-btn layui-btn-normal" style="margin-left: 200px">预览</button>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上传时间</label>
+            <div class="layui-input-block">
+                <input id="reportTime" type="text" class="layui-input" style="border: none;" disabled/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">论文</label>
+            <div class="layui-input-inline">
+                <input id="thesisFile" type="text" class="layui-input" style="border:none;width: 400px" disabled/>
+            </div>
+            <div class="layui-input-block">
+                <button id="thesisPreview" class="layui-btn layui-btn-normal" style="margin-left: 200px">预览</button>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上传时间</label>
+            <div class="layui-input-block">
+                <input id="thesisTime" type="text" class="layui-input" style="border: none;" disabled/>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">开题报告</label>
+        <button type="button" class="layui-btn" id="report"><i class="layui-icon"></i>上传文件</button>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">毕业论文</label>
+        <button type="button" class="layui-btn" id="thesis"><i class="layui-icon"></i>上传文件</button>
+    </div>
+</div>
+
+<script type="text/javascript" src="../assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../assets/common.js"></script>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'formSelects', 'admin', 'laydate', 'upload'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var laydate = layui.laydate;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        var upload = layui.upload;
+
+        layer.load(2);
+        admin.req('thesis/myself', {}, function (res) {
+            layer.closeAll('loading');
+            if (0 == res.status.code) {
+                $('#subject').val(res.data[0].subject);
+                $('#subtopic').val(res.data[0].subtopic);
+                $('#keyWord').val(res.data[0].keyWord);
+                $('#type').val(res.data[0].type);
+                $('#source').val(res.data[0].source);
+                $('#workload').val(res.data[0].workload);
+                $('#degreeDifficulty').val(res.data[0].degreeDifficulty);
+                $('#researchDirec').val(res.data[0].researchDirec);
+                $('#content').val(res.data[0].content);
+                $('#techName').val(res.data[0].techName);
+                $('#openingReport').val(res.data[0].openingReport);
+                $('#reportTime').val(res.data[0].reportTime);
+                $('#thesisFile').val(res.data[0].thesis);
+                $('#thesisTime').val(res.data[0].thesisTime);
+            } else {
+                layer.msg(res.status.message, {icon: 2});
+            }
+        }, 'GET');
+
+        //上传文件
+        upload.render({
+            elem: '#report',
+            url: base_server + 'thesisFile',
+            headers: {'X-Access-Token': admin.getToken()},
+            accept: 'file',//普通文件
+            data: {
+                thesisType: function () {
+                    return 'openingReport';
+                }
+            },
+            done: function (res) {
+                if (res.status.code == 0) {
+                    layer.msg('上传成功', {icon: 1});
+                } else {
+                    layer.msg('上传失败', {icon: 2});
+                }
+            }
+        });
+        upload.render({
+            elem: '#thesis',
+            url: base_server + 'thesisFile',
+            headers: {'X-Access-Token': admin.getToken()},
+            accept: 'file',//普通文件
+            data: {
+                thesisType: function () {
+                    return 'thesis';
+                }
+            },
+            done: function (res) {
+                if (res.status.code == 0) {
+                    layer.msg('上传成功', {icon: 1});
+                } else {
+                    layer.msg('上传失败', {icon: 2});
+                }
+            }
+        });
+
+        //预览文件
+        $('#reportPreview').click(function () {
+            var fileName = $('#openingReport').val();
+            admin.req('thesisPreview?fileName=' + fileName, {}, function (res) {
+                layer.closeAll('loading');
+                if (0 == res.status.code) {
+                    location.replace('../pdfjs/web/viewer.html?file=' + fileName);
+                } else {
+                    layer.msg(res.status.message, {icon: 2});
+                }
+            }, 'GET');
+        });
+        $('#thesisPreview').click(function () {
+            var fileName = $('#thesisFile').val();
+            admin.req('thesisPreview?fileName=' + fileName, {}, function (res) {
+                layer.closeAll('loading');
+                if (0 == res.status.code) {
+                    location.replace('../pdfjs/web/viewer.html?file=' + fileName);
+                } else {
+                    layer.msg(res.status.message, {icon: 2});
+                }
+            }, 'GET');
+        });
+    });
+
+</script>
+
+</body>
+</html>

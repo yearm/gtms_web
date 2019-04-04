@@ -198,7 +198,6 @@
                 layer.confirm('确定删除此论文题目吗？', function (i) {
                     layer.close(i);
                     layer.load(2);
-                    console.log(data);
                     admin.req('thesis?tid=' + data.tid, {}, function (res) {
                         layer.closeAll('loading');
                         if (res.status.code == 0) {

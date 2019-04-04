@@ -44,8 +44,8 @@
 
 <!-- 表格操作列 -->
 <script type="text/html" id="tableBar">
-    <a class="layui-btn layui-btn-xs" lay-event="reset">预览</a>
-    <a class="layui-btn layui-btn-xs" lay-event="edit">下载</a>
+    <a class="layui-btn layui-btn-xs" lay-event="reportPreview">开题报告预览</a>
+    <a class="layui-btn layui-btn-xs" lay-event="thesisPreview">论文预览</a>
 </script>
 
 <script type="text/javascript" src="../assets/libs/layui/layui.js"></script>
@@ -99,13 +99,48 @@
                 {field: 'source', title: '课题来源', sort: true},
                 {field: 'type', title: '课题类型', sort: true},
                 {field: 'openingReport', title: '开题报告', sort: true},
-                {align: 'center', toolbar: '#tableBar', title: '操作', unresize: true, width: 200},
                 {field: 'thesis', title: '论文', sort: true},
                 {align: 'center', toolbar: '#tableBar', title: '操作', unresize: true, width: 200}
             ]],
             even: true,
             skin: 'line',
             size: 'sm'
+        });
+
+        // 工具条点击事件
+        table.on('tool(thesisTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'reportPreview') { // 开题报告预览
+                layer.load(2);
+                var fileName = data.openingReport;
+                if (fileName == "") {
+                    layer.msg('没有上传开题报告', {icon: 2});
+                }
+                admin.req('thesisPreview?fileName=' + fileName, {}, function (res) {
+                    layer.closeAll('loading');
+                    if (0 == res.status.code) {
+                        location.replace('../pdfjs/web/viewer.html?file=' + fileName);
+                    } else {
+                        layer.msg(res.status.message, {icon: 2});
+                    }
+                }, 'GET');
+            } else if (layEvent == 'thesisPreview') {//论文预览
+                layer.load(2);
+                var fileName = data.thesis;
+                if (fileName == "") {
+                    layer.msg('没有上传论文', {icon: 2});
+                }
+                admin.req('thesisPreview?fileName=' + fileName, {}, function (res) {
+                    layer.closeAll('loading');
+                    if (0 == res.status.code) {
+                        location.replace('../pdfjs/web/viewer.html?file=' + fileName);
+                    } else {
+                        layer.msg(res.status.message, {icon: 2});
+                    }
+                }, 'GET');
+            }
         });
 
     });
