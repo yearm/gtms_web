@@ -14,7 +14,9 @@
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
-        <div class="layui-logo">毕业论文管理系统</div>
+        <a href="index.html">
+            <div class="layui-logo">毕业论文管理系统</div>
+        </a>
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item" lay-unselect>
                 <a><img src="assets/images/head.png" class="layui-nav-img"><span id="uName">用户名</span></a>
@@ -29,10 +31,17 @@
     <div class="layui-side">
         <div class="layui-side-scroll">
             <ul class="layui-nav layui-nav-tree" style="margin-top: 10px;">
-                <li class="layui-nav-item layui-nav-itemed">
+                <li class="layui-nav-item">
+                    <a><i class="layui-icon layui-icon-notice"></i>&emsp;公告信息</a>
+                    <dl class="layui-nav-child">
+                        <dd><a lay-href="pages/noticeList.html">公告列表</a></dd>
+                        <dd id="notice"><a lay-href="pages/notice.html">公告管理</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
                     <a><i class="layui-icon layui-icon-username"></i>&emsp;账号信息</a>
                     <dl class="layui-nav-child">
-                        <dd class="layui-this"><a lay-href="pages/admin.html">管理员</a></dd>
+                        <dd id="admin"><a lay-href="pages/admin.html">管理员</a></dd>
                         <dd><a lay-href="pages/teacher.html">指导老师列表</a></dd>
                         <dd><a lay-href="pages/student.html">学生列表</a></dd>
                     </dl>
@@ -41,16 +50,16 @@
                     <a><i class="layui-icon layui-icon-read"></i>&emsp;论文信息</a>
                     <dl class="layui-nav-child">
                         <dd><a lay-href="pages/thesis.html">论文列表</a></dd>
-                        <dd><a lay-href="pages/myThesis.html">我的论文</a></dd>
+                        <dd id="myThesis"><a lay-href="pages/myThesis.html">我的论文</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
                     <a><i class="layui-icon layui-icon-form"></i>&emsp;选题信息</a>
                     <dl class="layui-nav-child">
                         <dd><a lay-href="pages/selectedThesis.html">选题列表</a></dd>
-                        <dd><a lay-href="pages/waitConfirm.html">等待确认列表</a></dd>
-                        <dd><a lay-href="pages/confirmedThesis.html">已确认列表</a></dd>
-                        <dd><a lay-href="pages/openTime.html">选题时间管理</a></dd>
+                        <dd id="waitConfirm"><a lay-href="pages/waitConfirm.html">等待确认列表</a></dd>
+                        <dd id="confirmedThesis"><a lay-href="pages/confirmedThesis.html">已确认列表</a></dd>
+                        <dd id="openTime"><a lay-href="pages/openTime.html">选题时间管理</a></dd>
                     </dl>
                 </li>
             </ul>
@@ -58,7 +67,7 @@
     </div>
 
     <div class="layui-body">
-        <iframe name="body" class="admin-iframe" src="pages/admin.html" frameborder="0"></iframe>
+        <iframe name="body" class="admin-iframe" src="pages/home.html" frameborder="0"></iframe>
     </div>
 </div>
 <!-- 修改密码弹窗 -->
@@ -110,15 +119,28 @@
             layer.closeAll('loading');
             if (0 == res.status.code) {
                 role = res.data.role;
+                admin.putRole(res.data.role);
                 if (res.data.role == "admin") {
                     adminId = res.data.adminInfo.adminId;
                     $('#uName').text(res.data.adminInfo.adminName);
+                    $('#myThesis').hide();
+                    $('#waitConfirm').hide();
+                    $('#confirmedThesis').hide();
                 } else if (res.data.role == "teacher") {
                     techId = res.data.techInfo.techId;
                     $('#uName').text(res.data.techInfo.techName);
+                    $('#notice').hide();
+                    $('#admin').hide();
+                    $('#myThesis').hide();
+                    $('#openTime').hide();
                 } else {
                     stuNo = res.data.stuInfo.stuNo;
                     $('#uName').text(res.data.stuInfo.stuName);
+                    $('#notice').hide();
+                    $('#admin').hide();
+                    $('#waitConfirm').hide();
+                    $('#confirmedThesis').hide();
+                    $('#openTime').hide();
                 }
             } else {
                 layer.msg(res.status.message, {icon: 2});
@@ -137,8 +159,9 @@
                         location.replace('login.html');
                     }
                 }, 'DELETE');
-                //删除本地缓存token
+                //删除本地缓存token,role
                 admin.removeToken();
+                admin.removeRole();
             });
         });
 
