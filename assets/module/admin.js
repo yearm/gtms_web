@@ -58,6 +58,21 @@ layui.define(['layer'], function (exports) {
                 success: success
             });
         },
+
+        //封装ajax请求(同步)
+        areq: function (url, data, success, method) {
+            $.ajax({
+                url: (base_server ? base_server : '') + url,
+                data: data,
+                type: method,
+                async: false,
+                beforeSend: function (request) {
+                    //每次请求都带上本地缓存token
+                    request.setRequestHeader("X-Access-Token", admin.getToken())
+                },
+                success: success
+            });
+        }
     };
 
     // 所有ew-event

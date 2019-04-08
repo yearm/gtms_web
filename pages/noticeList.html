@@ -1,10 +1,142 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>毕业论文管理系统</title>
+    <link rel="icon" href="../assets/images/favicon.ico"/>
+    <link rel="stylesheet" href="../assets/libs/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../assets/module/formSelects/formSelects-v4.css" media="all">
+    <link rel="stylesheet" href="../assets/common.css" media="all">
 </head>
+
 <body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body layui-form">
+            <table class="layui-table" id="noticeTable" lay-filter="noticeTable"></table>
+        </div>
+    </div>
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBar">
+    {{#  if(role == "admin"){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="see">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    {{#  } else{ }}
+    <a class="layui-btn layui-btn-xs" lay-event="see">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" style="display: none">删除</a>
+    {{#  } }}
+</script>
+
+<script type="text/javascript" src="../assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../assets/common.js"></script>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'formSelects', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var formSelects = layui.formSelects;
+        var admin = layui.admin;
+        role = admin.getRole();
+
+        // 渲染表格
+        table.render({
+            elem: '#noticeTable',
+            url: base_server + 'notice/list',
+            method: 'get',
+            headers: {'X-Access-Token': admin.getToken()},
+            page: true,
+            request: {
+                pageName: 'page', //页码的参数名称，默认：page
+                limitName: 'pageCount' //每页数据量的参数名，默认：limit
+            },
+            cellMinWidth: 100,
+            parseData: function (res) {
+                return {
+                    "code": res.status.code, //解析接口状态
+                    "msg": res.status.message, //解析提示文本
+                    "count": res.data.pageInfo.total, //解析数据长度
+                    "data": res.data.dataList //解析数据列表
+                }
+            },
+            cols: [[
+                {field: 'nid', title: '公告id', sort: true, hide: true},
+                {field: 'title', title: '标题', sort: true},
+                {field: 'view', title: '阅读次数', sort: true},
+                {field: 'createUser', title: '发布人', sort: true},
+                {field: 'createTime', title: '发布时间', sort: true},
+                {align: 'center', toolbar: '#tableBar', title: '操作', unresize: true, width: 200}
+            ]],
+            even: true,
+            skin: 'nob',
+            size: 'sm'
+        });
+
+        // 工具条点击事件
+        table.on('tool(noticeTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'see') { // 查看
+                admin.areq('notice?nid=' + data.nid, {}, function (res) {
+                    title = res.data.title;
+                    content = res.data.content;
+                    attachment = res.data.attachment;
+                    createUser = res.data.createUser;
+                    createTime = res.data.createTime;
+                }, 'GET');
+                var attachArr = attachment.split(",");
+                var attachBtn = "";
+                for (var i = 0; i < attachArr.length; i++) {
+                    attachBtn = attachBtn + `<button id="attachbtn" class=\"layui-btn layui-btn-sm\">` + attachArr[i] + `</button><br><br>`;
+                }
+                page = `<div style="margin-left: 10px;margin-right: 10px">
+    <h2 style="text-align: center">` + title + `</h2>
+    <p>发布人：` + createUser + `</p>
+    <p>发布时间：` + createTime + `</p>
+    <hr class="layui-bg-black">
+    ` + content + `
+    <hr class="layui-bg-black">
+    <p>附件:</p>
+    ` + attachBtn + `
+</div>`;
+                layer.open({
+                    type: 1,
+                    area: '900px',
+                    offset: '65px',
+                    title: '公告阅读',
+                    content: page,
+                    // success: function (layero, index) {
+                    //
+                    // }
+                });
+            } else if (layEvent === 'del') {//删除
+                layer.confirm('确定删除此公告？', function (i) {
+                    layer.close(i);
+                    layer.load(2);
+                    admin.req('notice?nid=' + data.nid, {}, function (res) {
+                        layer.closeAll('loading');
+                        if (res.status.code == 0) {
+                            layer.msg("删除成功", {icon: 1});
+                            obj.del();
+                        } else {
+                            layer.msg(res.status.message, {icon: 2});
+                        }
+                    }, 'DELETE');
+                });
+            }
+        });
+
+
+    });
+</script>
 
 </body>
 </html>
